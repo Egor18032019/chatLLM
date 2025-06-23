@@ -1,6 +1,9 @@
 package chat.llm.giga.controller;
 
 import chat.llm.giga.model.Message;
+import chat.llm.giga.service.GigaChatService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -14,19 +17,17 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @RestController
+@RequiredArgsConstructor
 public class ChatController {
     private final SimpMessagingTemplate template;
-
-    public ChatController(SimpMessagingTemplate template) {
-        this.template = template;
-    }
+    private final GigaChatService gigaChatService;
 
     @PostMapping(value = "/api/send", consumes = "application/json", produces = "application/json")
-    public void sendMesscage(@RequestBody Message message) {
+    public void sendMessage(@RequestBody Message message) throws JsonProcessingException {
         message.setTimestamp(LocalDateTime.now().toString());
-        System.out.println(message.toString());
-        System.out.println("Отправка сообщений всем пользователям");
-        template.convertAndSend("/topic/group", message);
+        Message answer = gigaChatService.executeLLM(message);
+        template.convertAndSend("/topic/group", answer);
+
     }
 
     //    -------------- WebSocket API ----------------

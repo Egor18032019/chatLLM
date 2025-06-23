@@ -11,7 +11,7 @@
 	<groupId>chat.llm</groupId>
 	<artifactId>backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>giga</name>
+	<name>backend</name>
 	<description>Chat with LLM GigaCode</description>
 	<url/>
 	<licenses>
@@ -48,6 +48,26 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- Spring WebFlux (для WebClient) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+
+		<!-- Reactor Netty (используется WebClient по умолчанию) -->
+		<dependency>
+			<groupId>io.projectreactor.netty</groupId>
+			<artifactId>reactor-netty-http</artifactId>
+		</dependency>
+
+		<!-- Netty (для работы с SSLContext и InsecureTrustManagerFactory) -->
+		<!-- https://mvnrepository.com/artifact/io.netty/netty-handler -->
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-handler</artifactId>
+			<version>5.0.0.Alpha2</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
