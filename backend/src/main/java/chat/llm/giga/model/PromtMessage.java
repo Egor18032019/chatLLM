@@ -12,4 +12,5 @@ import lombok.Setter;
 public class PromtMessage {
     private String role;
     private String content;
+
 }
