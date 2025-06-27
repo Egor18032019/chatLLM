@@ -14,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,7 +27,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class GigaChatService {
-    private final String accessToken = "eyJjdHkiOiJqd3QiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiUlNBLU9BRVAtMjU2In0.uorjbQTZLeFQ38TE_fktakITHYjA-htFqpV54xkqxHBuHZaY0sKzZGjy-OkvfAKtZ10Sezp_ZRN_m9LCd_hHVGLXGlfdf1-qYcueLM9DGHUzCrHS40ExdM22HS3Iqa-vE5c576fxOM7foxJEbPqnTMfmTI-gnexV6eLEw1OoqbBSvS7xGFm0sJ8R1ltmZmFpi7aB0xyoCZwrupTz0JdNcZ7KdI_cfXs7TPOgJu5I7BPrjXo-bBuby8OgVMEUG_ZKXx_ecjL_Pyv8EnEtUJyk3uZnnDBNJHwrrV7COpLbl2bOaL2JggB8kjMzeujod5YWwmqzmD5FHyuEfXXBERPIJg.DLKfPMPghVufKt_5_2CMvw.tUhLuZQgxYoBffIIpjXPqCEYc5m6iKoNNiVHa5RpZZOjoZtddnIaLmBhZ4gCGprEYaFEEc1uNgPEm31LuAkiUquk6wXXvrzTkoriGo-x1f0u1Ivr3uSfWJ_mL3vYqOOJzrKTiok9mIBCHhYc6F9V2VIfKQnLTbaQ5v6g5qjSs8UY7F88AWmqEKFEUeUZ-M9FzVdRMHzfLtaFw9g8a-LZAscjM_M4PdK-juz06q3wbJThWpcxEJx8127ElyXyY0KrYRYg_HhIYM_AywdcyfmC1P7RuoPPgrIB7aP3vIp8YTemcm1rTorRt1gCUlZ7eZLepsPdycvhclG8sRHeskyWG9Ik6bIPz4aNKL5VFWML3EXsB9aFruqoTzOhqUOnpYKo47lVa_tf4nbNFm5EbYjk6GSPdiSkZJaeMTgWPJHBP-l4pSWPee2zMG-X-XxTnuGR7nBfwqTelugGYIBOUK86tVobO2Eu0R3Mfw0jFrKj3vdWyvj-swIzlfIkfi8pCD-pe5IzbmOxar5bCNQWU15yJBzWbeg68AcmEOgUo6RMnqOZ5AmX58EWYXeCkCH6R9tub-H8U-IX7X9Driz_F30RDaW5o0spOrmU7mS4LiKzw0E43U15xUy5L0V8Ri4oCuwhWrbdEr7_3NafNlps_lHJ0Nm98jqZYe-Hu9knqGAWiiWK7E5M1AqfSeCpUE_jzGCBFOBg5-L-cqDNE_x_MBheTSdaXVAWRKB1G_zulS60uA4.4cFmr4lqqjWIYVL8_9ajotjosmdK62fr2k1uV5ePwXU";
+    private final String accessToken = "eyJjdHkiOiJqd3QiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwiYWxnIjoiUlNBLU9BRVAtMjU2In0.OuAwfYtDkzlCCKGwQOUFnoo7pDY6U6kSTOT22kVNHAmaienulHE0mcRPwZ9xYuQq7kz4EiaWJp8-yAllDqBk4FS9PBUpoTlcOzexw9wQQKfd2ODEDd2r4cpZicUmoqzLJYUSNNyqUjdZbeefb9usWQ2116e5P3-WsJbXllWRdZfugCX0GAvNbQ1NbOMBjebAR83iXivOsr8JPe_xzhOY6kgcUGUrHVylghg8sLoM79R7T_Ids5i_LZHCCdbj_E3-1Jg2Wb-ShQ_ubEFf5eC9jp3pve5M1Kmv1HE2ON6BZ4JdTfSyGAYuLGSmbEvWL36KeIt9j97Z82D37TMUEc4DNw.Kbr_MZMu96VIZaehFR-mfw.Q-tfJAw-AQAW6TX_vK0vtZ3KWrQhDz7gMxScdt614HM-KWnNCnx3J-TlqrCk10QDZg9IR3AXK63j3elRS5FoNqAh9GtVIS96I-f-VJ4x7oAisRRpVhDAnLxYXlu9jMITvy0KCxtJQY5zh39VK33YF9lt6cqexm_hGZ6m-NC9wKSlLC7GKTJ6acyepJsUHiRXKT5ltc6k7zBpi424ZefEciQ96M1X9URrN-uuF_-MVeNlP6MRlOc1MemWk7lcQJTkWZBSyZMrocosnSWqjEvS8mJy9Q8CNTahIspW9-6l6sYc4ekZfbcQRlPgoHALJg-nXEQghBNPPuWG5PEH-rFMOU41boEDQwAWqGr-wvqrXEVpHH7YApfG7Vti_PJGGX5MMb7ia245ZfXNIYKXH2NC83o6ZE3exyFJ1OyqzYMygi_InIgIGeVG9hJackSL4xQm-6EaoyF9Uu2_bm_yASmyaRm7vAbxXosqXFLoqOAZS78OjabeLEuv3Ujhipu4Sh4owu8as8OdnDpZsaj1LpZdmkkhk5AbcByMmVpMzalWfERTDrHBYOkc2YqaQw25jGLDpkdRZw_1sgNZ00VGlc4uNmyP1xHwKC4pA238nLEsM9vMEf_SBWHNCerIpfrDRL1n5QKAy1HbVudEePuJJVcbv_EdYK8j6PUYO656OGejX6z29_TvADpZmob_wQ6KUXprgT7ndunSqJ_BpAUVUZOQlBjQ7pp0Zw9DfbuKBYYCjrE.85c653DY18512xAFZBQonp310pWDWfCeXRHYuwQwPoE";
     String url = "https://gigachat.devices.sberbank.ru/api/v1/chat/completions";
     private final SimpMessagingTemplate template;
     String status = "общение";
@@ -36,7 +35,7 @@ public class GigaChatService {
 
     public void executeLLM(Message message) throws JsonProcessingException {
 
-        if (status.equals("общение")){
+        if (status.equals("общение")) {
             ResponseEntity<String> response = enrichment(message);
 
 
@@ -50,20 +49,26 @@ public class GigaChatService {
                     .asText();
             System.out.println(modelResponseContent);
             switch (modelResponseContent) {
-                case "Баланс." -> giveMeBalance();
-                case "Ключевое слово." -> changeMainBalance(message.getContent(), modelResponseContent);
+                case "Лимит." -> giveMeMainLimit();
+                case "Ключевое слово." -> changeMainLimit();
                 default ->
                         template.convertAndSend("/topic/group", new Message("Giga", modelResponseContent, LocalDateTime.now().toString()));
             }
             return;
         }
-        if (status.equals("изменения баланса")) {
+        if (status.equals("изменения лимита")) {
             if (!message.getContent().isEmpty()) { //todo проверка на число
+                try {
+                    balance = balance.add(BigDecimal.valueOf(Long.parseLong(message.getContent())));
+                } finally {
+                    template.convertAndSend("/topic/group",
+                            new Message("Giga",
+                                    "Напишите числами ", LocalDateTime.now().toString()));
+                }
 
-                balance = balance.add(BigDecimal.valueOf(Long.parseLong(message.getContent())));
                 template.convertAndSend("/topic/group",
                         new Message("Giga",
-                                "Ваш баланс: " + balance, LocalDateTime.now().toString()));
+                                "Ваш лимит: " + balance, LocalDateTime.now().toString()));
             }
             status = "общение";
             return;
@@ -72,8 +77,8 @@ public class GigaChatService {
             if (message.getContent().equals("ключевое слово")) {
                 template.convertAndSend("/topic/group",
                         new Message("Giga",
-                                "Насколько вы хотите изменить баланс.", LocalDateTime.now().toString()));
-                status = "изменения баланса";
+                                "Насколько вы хотите изменить лимит.", LocalDateTime.now().toString()));
+                status = "изменения лимита";
             } else {
                 template.convertAndSend("/topic/group",
                         new Message("Giga",
@@ -84,8 +89,6 @@ public class GigaChatService {
         }
 
 
-
-
     }
 
     public ResponseEntity<String> enrichment(Message message) {
@@ -93,9 +96,9 @@ public class GigaChatService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Bearer " + accessToken);
 //        headers.set("X-Session-ID", "dfa87a40-99a9-42c4-b810-6c7caa1e1e8");
-        headers.set("X-Client-ID", new UUID(3,3).toString());
-        headers.set("X-Request-ID", new UUID(4,4).toString());
-        headers.set("X-Session-ID", new UUID(5,5).toString());
+        headers.set("X-Client-ID", new UUID(3, 3).toString());
+        headers.set("X-Request-ID", new UUID(4, 4).toString());
+        headers.set("X-Session-ID", new UUID(5, 5).toString());
         Promt promt = initialVerification();
         PromtMessage userMessage = new PromtMessage("user", message.getContent());
         promt.getMessages().add(userMessage);
@@ -118,9 +121,9 @@ public class GigaChatService {
         PromtMessage promtMessage = new PromtMessage("system", "Ты - персонаж технической поддержки. " +
                 "Твоя задача — помогать пользователям решать технические проблемы." +
                 """
-                         Тебе будет дан ответ пользователя.
-                         Если пользователь хочет сменить баланс, то необходимо вернуть ответ в виде: "Ключевое слово.".
-                         Если пользователь хочет узнать баланс, то необходимо вернуть ответ в виде: "Баланс.".
+                         Тебе будет дан запрос от пользователя.
+                         Если пользователь хочет изменить лимит, то необходимо вернуть ответ в виде: "Ключевое слово.".
+                         Если пользователь хочет узнать лимит, то необходимо вернуть ответ в виде: "Лимит.".
                          В любом другом случае необходимо дать ответ пользователю в рамках своей роли.
                         
                         """
@@ -133,26 +136,24 @@ public class GigaChatService {
 
     }
 
-    public void changeMainBalance(String userMessage, String modelResponseContent) {
+    public void changeMainLimit() {
         Map<String, Object> headers = new HashMap<>();
-        headers.put("change-balance", "header-value");
+        headers.put("change-limit", "header-value");
         headers.put("another-header", 12345);
         status = "проверка слова";
         MessageHeaders messageHeaders = new MessageHeaders(headers);
 
         template.convertAndSend("/topic/group",
-                new Message("Giga", "Напишите ваше ключевое слово, чтобы изменить баланс.", LocalDateTime.now().toString()),
+                new Message("Giga", "Напишите ваше ключевое слово, чтобы изменить лимит.", LocalDateTime.now().toString()),
                 messageHeaders);
         System.out.println("Проверяем ключевое слово...");
-
-
     }
 
-    public void giveMeBalance() {
-        System.out.println("Запрашиваем баланс...");
+    public void giveMeMainLimit() {
+        System.out.println("Запрашиваем лимит...");
         Map<String, Object> headers = new HashMap<>();
-        headers.put("balance", "balance-value");
-        template.convertAndSend("/topic/group", new Message("Giga", "Ваш баланс: " + balance, LocalDateTime.now().toString()),
+        headers.put("limit", "limit-value");
+        template.convertAndSend("/topic/group", new Message("Giga", "Ваш лимит: " + balance, LocalDateTime.now().toString()),
                 headers);
 
     }
